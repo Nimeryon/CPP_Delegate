@@ -24,8 +24,8 @@ int main()
 {
     auto lambdaFunction = []{ std::cout << "LambadaFunctionWithArgs callback called" << std::endl; };
 
-    Foo foo1();
-    Foo foo2();
+    Foo foo1;
+    Foo foo2;
 
     // Testing EventListener
     Delegate callbackTest;
