@@ -11,36 +11,21 @@ Here's a quick explanation of how to use:
 #include <iostream>
 #include "Delegate.h"
 
-static void StaticFunction()
-{
-    std::cout << "FooFunction callback called" << std::endl;
-}
+static void StaticFunction() { std::cout << "FooFunction callback called" << std::endl; }
 
 class Foo
 {
 public:
-    Foo(int d) : m_d(d) {}
-
-    void MemberFunction()
-    {
-        std::cout << "MemberFunction called d: " << m_d << std::endl;
-    }
-
-    void MemberFunctionWithArgs(float a, int b, std::string c)
-    {
-        std::cout << "MemberFunctionWithArgs callback called a: " << a << " b: " << b << " c: " << c << " d: " << m_d << std::endl;
-    }
-
-private:
-    int m_d;
+    void MemberFunction() { std::cout << "MemberFunction called" << std::endl; }
+    void MemberFunctionWithArgs(float a) { std::cout << "MemberFunctionWithArgs callback called a: " << a << std::endl; }
 };
 
 int main()
 {
     auto lambdaFunction = []{ std::cout << "LambadaFunctionWithArgs callback called" << std::endl; };
 
-    Foo foo1(5);
-    Foo foo2(8);
+    Foo foo1();
+    Foo foo2();
 
     // Testing EventListener
     Delegate callbackTest;
@@ -64,22 +49,22 @@ int main()
     callbackTest();
 
     // Testing EventListernerMember
-    Delegate<float, int, std::string> callbackWithArgsTest;
+    Delegate<float> callbackWithArgsTest;
 
     callbackWithArgsTest.Subscribe(&foo1 , &Foo::MemberFunctionWithArgs);
-    callbackWithArgsTest(2.0f, 1, "Test1");
+    callbackWithArgsTest(1.0f);
     callbackWithArgsTest.Subscribe(&foo1, &Foo::MemberFunctionWithArgs);
     callbackWithArgsTest.Subscribe(&foo2, &Foo::MemberFunctionWithArgs);
-    callbackWithArgsTest(2.0f, 2, "Test2");
+    callbackWithArgsTest(2.0f);
 
     callbackWithArgsTest.UnSubscribe(&foo1, & Foo::MemberFunctionWithArgs);
-    callbackWithArgsTest(2.0f, 3, "Test3");
+    callbackWithArgsTest(3.0f);
     callbackWithArgsTest.UnSubscribe(&foo1, &Foo::MemberFunctionWithArgs);
     callbackWithArgsTest.UnSubscribe(&foo2, &Foo::MemberFunctionWithArgs);
-    callbackWithArgsTest(2.0f, 4, "Test4");
+    callbackWithArgsTest(4.0f);
 
     callbackWithArgsTest.Clear();
-    callbackWithArgsTest(2.0f, 5, "Test5");
+    callbackWithArgsTest(5.0f);
 
     return EXIT_SUCCESS;
 }
